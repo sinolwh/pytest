@@ -1,0 +1,47 @@
+
+def getUserNames(nameFile):
+    file = open(nameFile, "r")
+    names = []
+    for line in file.readlines():
+        names.append(line)
+    file.close()
+    return names
+
+
+def getChangeDetails(fileAddr):
+    file = open(fileAddr, "r")
+    addr = []
+    addrChangeNames = {}
+    keytemp = ""
+    for line in file.readlines():
+        if "test/" in line:
+            if keytemp != "" :
+                addrChangeNames[keytemp] = addr
+                addr = []
+            keytemp = line
+        else:
+            addr.append(line)
+
+    file.close()
+    return addrChangeNames
+
+
+def getChangePass(names, addrChangeNames):
+    passlist = []
+    for key in addrChangeNames:
+        for name in names:
+            if name in addrChangeNames[key]:
+                passlist.append(key)
+                break
+    return passlist
+
+
+if __name__ == '__main__':
+    namePass = input("name is:")
+    filePass = input("file is")
+    list = getChangePass(getUserNames(namePass), getChangeDetails(filePass))
+    print(list)
+    outfile = open("out.txt", "w")
+    for addr in list:
+        outfile.write(addr)
+    outfile.close()
